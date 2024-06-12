@@ -33,7 +33,7 @@
 
 <iframe
   src="assets/hist_grid.html"
-  width="800"
+  width="950"
   height="600"
   frameborder="0"
 ></iframe>
