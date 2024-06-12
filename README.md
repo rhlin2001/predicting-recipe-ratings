@@ -1,1 +1,1 @@
-# predicting-recipe-ratings
+# Predicting Recipe Ratings
