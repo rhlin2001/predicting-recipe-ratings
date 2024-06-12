@@ -34,7 +34,7 @@
 <iframe
   src="assets/hist_grid.html"
   width="950"
-  height="500"
+  height="600"
   frameborder="0"
 ></iframe>
 
