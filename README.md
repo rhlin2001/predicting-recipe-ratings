@@ -38,6 +38,20 @@
 
 ### Bivariate Analysis
 
+<iframe
+  src="assets/rating_vs_ingredients.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/rating_vs_calories.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
 ### Interesting Aggregates
 
 |   rating |   minutes |   n_steps |   n_ingredients |   calories |   total_fat |   sugar |   sodium |   protein |   saturated_fat |   carbohydrates |
@@ -51,6 +65,24 @@
 
 
 ## Assessment of Missingness
+
+### NMAR Analysis
+
+### Missingness Dependency
+
+<iframe
+  src="assets/emp_dist_1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/emp_dist_2.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 
 
