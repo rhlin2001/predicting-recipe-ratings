@@ -10,7 +10,7 @@ Authors: Richard Lin, Francisco Downey
 
 Cooking recipes are traditions that are as old as civilization itself, passed on from generation to generation. In modern times, there is a large and growing community of home cooks including people who like to share recipes and people who try to follow and rate them. There are many factors that go into rating recipes such as personal enjoyment, ingredients, nutrition, and easy preparation. Our goal for this project is to try to determine what types of recipes have high ratings, and to ultimately build a model that can predict ratings for recipes. If we are able to accomplish this goal, then people may use our model to understand what kind of recipes deserve specific ratings.
 
-For our project, we will be using datasets from [Food.com](https://www.food.com/recipe) which include `recipes` (83,782 observations and 12 variables) and `interactions` (731,927 observations and 5 variables).
+For our project, we will be using datasets from [Food.com](https://www.food.com/recipe) which include `recipes` (83,782 observations and 10 variables) and `interactions` (731,927 observations and 5 variables).
 
 ### Recipes:
 
@@ -123,9 +123,13 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
 
 ## Framing a Prediction Problem
 
+Recalling the main question guiding this project, the importance of a rating matters to those interested in cooking and/or eating these meals. Furthermore, it would be extremely beneficial to have the ability to know the rating even when just given a few details about the recipe. Our project aims to classify `rating`, the response variable, of a given recipe using a multiclass classification approach. The model’s features that will be used to predict the rating are available before the reviewer inputs their rating. To evaluate the model, a classification report is derived where accuracy is a key metric being used to evaluate the model’s performance. Not only is it intuitive, but it provides a measure of how correct the model is. However, due to the imbalanced distribution of classes, the F1-score is leveraged to achieve a balanced evaluation between precision and recall. For instance, when viewing the distribution of ratings, it is apparent that the majority of ratings is five. It is important that we can accurately predict other ratings. It would be terrible to prepare a recipe with a rating of one because it was believed to have a rating of five. If the project were to only use accuracy, it could be high solely due to predicting only ratings of five. By not only focusing on accuracy, we are able to measure how well the model does in the other classes as well.
+
 
 
 ## Baseline Model
+
+Wanting an easily interpretable model for classification, we chose to use ordinal logistic regression. As an extension of the linear regression model, it is best suited for this project because of its use of a linear combination of features to output probabilities for classification. Wanting to predict the rating of a recipe, our first intuition was to use the nutritional composition of the recipe, mainly total fat, sugar, and carbohydrates. These features were all quantitative, represented as percentages of daily value for a recipe. The features were transformed by a `QuantileTransformer` object within a `ColumnTransformer`. By doing so, the distributions of these features were normalized, we reduced outliers, and we transformed the data to be more linearly separable. The `ColumnTransformer` was then passed into a `Pipeline` which added a `LogisticRegression` model. With just these transformed features implemented in the logistic regression model, a 77.29% training accuracy and a 77.02% testing accuracy was achieved. Although our baseline model achieved a reasonably high accuracy, the F1 score was zero for all ratings except for the rating of five which had an F1 score of 0.87. With only these three features, we considered our current model as insufficient since it seemed trivial to make every prediction as a rating of five while still achieving relatively high accuracy. The baseline model needs additional feature engineering to improve its predictive power for the other ratings.
 
 
 
