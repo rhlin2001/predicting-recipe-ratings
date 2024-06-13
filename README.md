@@ -135,6 +135,17 @@ Wanting an easily interpretable model for classification, we chose to use ordina
 
 ## Final Model
 
+Although the baseline model performed poorly given only three features, we think incorporating these features into our final model is beneficial for the predictive power. In addition, one feature that we believe to be crucial is the `review` column. The `review` column is text that the reviewer submitted which consists of their thoughts on the recipe and whether they liked it or not. In other words, it contains valuable sentimental information that we can use to differentiate between positive and negative reviews in order to predict ratings. To incorporate this essential feature, we use a term frequency-inverse document frequency (TF-IDF) approach. TF-IDF allows for the retrieval of the importance of a term or word in its respective document, or review in this case. The most important words such as “love”, “yummy”, and “best” can reflect positive sentiment, and likely higher ratings whereas words such as “hate”, “gross”, and “worst” can reflect negative sentiment, and likely lower ratings. To use the TF-IDF approach, we add a `TfidfVectorizer` object in the ColumnTransformer to process the `review` column. In addition to this, we also standardize `n_steps` and `minutes` using `StandardScaler` in the ColumnTransformer to try to improve the predictive capability even further. We choose these two features because we believe that these quantify the ease to follow the recipe. We reason that how easy it is to prepare a dish can severely affect the rating. For example, if two dishes have the same macronutrients, but one takes 30 minutes while the other takes two days, the ratings for the two could be very different. Furthermore, we use `GridSearchCV` with 3-fold cross validation to find the optimal hyperparameter of `max_iter` (maximum number of iterations) for model convergence which we find to be 1000. This time, we achieve an 83.83% training accuracy and an 81.15% testing accuracy. Not only did the accuracy increase, but so did the F1 scores of all ratings. The F1 scores for the ratings from 1-5 are 0.55, 0.12, 0.35, 0.40, 0.90 respectively. Although far from ideal, these scores show drastic improvement from the baseline model.
+
 
 
 ## Fairness Analysis
+
+To ensure the final model is fair for different groups of observations, we conduct permutation testing and define our two groups by the date of the review (one for reviews before 01-01-2013 and other for reviews after 01-01-2013).
+
+**Null:** Our model is fair. Its accuracy for reviews before 2013 and after 2013 are roughly the same, and any differences are due to random chance.
+**Alternative:** Our model is unfair. Its accuracy for reviews before 2013 is lower than that of after 2013.
+**Test Statistic:** Difference in Group Accuracy
+**Significance Level:** 0.05
+
+With a p-value of 0.104 and a significance level of 5%, we fail to reject the null in favor of the alternative. Thus, this suggests that our model is fair.
