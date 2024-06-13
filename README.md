@@ -43,6 +43,8 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
 
 ### Data Cleaning
 
+As with most datasets, data cleaning was necessary. To do so, the project merged the recipes and interactions dataset with a left merge on the ’id’ column of recipes and the ‘recipe_id’ column of interactions. After joining two datasets to create this one, there were 234,429 observations and 27 total features. Next was replacing any zeros in the rating column with NaN. This is important as the lowest rating should be one and not zero. The nutrition column, originally containing string values of the percentage of each nutrient, was split into individual columns with each nutrient within the row converted to a float. This allowed the project to utilize the key elements in the nutrition column as features in the baseline and final model. Lastly, the date column, originally in a string format, was transformed to a datetime object. This was done so that recipes can be split at a date and in order to evaluate the fairness of the project’s final model. After cleaning, the dataset was much easier to work with by making it both more interpretable and with columns in the format that makes them usable.
+
 | name                                 |     id |   minutes |   contributor_id | submitted           | tags                                                  | nutrition                                 |   n_steps | steps                                                 | description                                           | ingredients                                           |   n_ingredients |          user_id |   recipe_id | date                |   rating | review                                                |   avg_rating |   calories |   total_fat |   sugar |   sodium |   protein |   saturated_fat |   carbohydrates |
 |:-------------------------------------|-------:|----------:|-----------------:|:--------------------|:------------------------------------------------------|:------------------------------------------|----------:|:------------------------------------------------------|:------------------------------------------------------|:------------------------------------------------------|----------------:|-----------------:|------------:|:--------------------|---------:|:------------------------------------------------------|-------------:|-----------:|------------:|--------:|---------:|----------:|----------------:|----------------:|
 | 1 brownies in the world    best ever | 333281 |        40 |           985201 | 2008-10-27 00:00:00 | ['60-minutes-or-less', 'time-to-make', 'course', '... | [138.4, 10.0, 50.0, 3.0, 3.0, 19.0, 6.0]  |        10 | ['heat the oven to 350f and arrange the rack in th... | these are the most; chocolatey, moist, rich, dense... | ['bittersweet chocolate', 'unsalted butter', 'eggs... |               9 | 386585           |      333281 | 2008-11-19 00:00:00 |        4 | These were pretty good, but took forever to bake. ... |            4 |      138.4 |          10 |      50 |        3 |         3 |              19 |               6 |
@@ -52,6 +54,8 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
 | 412 broccoli casserole               | 306168 |        40 |            50969 | 2008-05-30 00:00:00 | ['60-minutes-or-less', 'time-to-make', 'course', '... | [194.8, 20.0, 6.0, 32.0, 22.0, 36.0, 3.0] |         6 | ['preheat oven to 350 degrees', 'spray a 2 quart b... | since there are already 411 recipes for broccoli c... | ['frozen broccoli cuts', 'cream of chicken soup', ... |               9 | 520830           |      306168 | 2017-10-17 00:00:00 |        5 | 5 stars from my husband and son, my toughest criti... |            5 |      194.8 |          20 |       6 |       32 |        22 |              36 |               3 |
 
 ### Univariate Analysis
+
+When viewing the univariate plot of the distribution of ratings, it’s easy to see the unbalanced ratings where the rating of five makes up the majority. Knowing this is important to how the project evaluates its predictive model as accuracy may not be the best metric to use.
 
 <iframe
   src="assets/rating_hist.html"
@@ -69,6 +73,8 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
 
 ### Bivariate Analysis
 
+The bivariate plots, separated by ratings, surprisingly reveal that there is no significant difference in the calories or the number of ingredients across the ratings.
+
 <iframe
   src="assets/rating_vs_ingredients.html"
   width="800"
@@ -85,6 +91,8 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
 
 ### Interesting Aggregates
 
+When viewing the grouped table, the means of the variables per each rating show no interesting patterns amongst the numerical columns that include minutes, number of steps, calories, and percentages of carbohydrates, total fat, sugar, sodium, protein, and saturated fat. Although there seems to be no strong trend in the table, there is some variation amongst the ratings that may prove to be significant.
+
 |   rating |   minutes |   n_steps |   n_ingredients |   calories |   total_fat |   sugar |   sodium |   protein |   saturated_fat |   carbohydrates |
 |---------:|----------:|----------:|----------------:|-----------:|------------:|--------:|---------:|----------:|----------------:|----------------:|
 |        1 |   36.2803 |   9.33219 |         8.42849 |    253.136 |     18.1094 | 33.1732 |  15.1561 |   20.2205 |         23.4006 |         8.29516 |
@@ -99,7 +107,11 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
 
 ### NMAR Analysis
 
+It was found that there is no feature in this dataset that was Not Missing At Random(NMAR). There is no feature present in the dataset that is missing due to its own value. Description and review is missing due to other columns and not its own value.
+
 ### Missingness Dependency
+
+To determine whether the review missingness is Missing At Random(MAR) or Missing Completely At Random(MCAR), a permutation test was conducted with a null hypothesis that stated that the distribution of ‘minutes’ when ‘review’ is missing is the same as the distribution of ‘minutes’ when ‘review’ is not missing. The alternative hypothesis is that the missingness of ‘review’ depends on ‘minutes’. A new column is created which has a label of True if the review is missing and False if it is not. By grouping the permuted labels into true and false groups and calculating the average number of minutes for both groups, the test statistic can be obtained as the difference in means in each of the 500 iterations. With a significance level of 5% and a p-value of 0.438, the project fails to reject the null hypothesis. 
 
 <iframe
   src="assets/emp_dist_1.html"
@@ -107,6 +119,8 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
   height="600"
   frameborder="0"
 ></iframe>
+
+However, this process needed to be applied to the other columns to show evidence of MCAR. Another permutation test was conducted with the null hypothesis that stated that the distribution of ‘n_steps’ when ‘review’ is missing is the same as the distribution of ‘minutes’ when ‘review’ is not missing. The alternative hypothesis is that the missingness of ‘review’ depends on ‘n_steps’. As with the permutation test before, grouping the permuted labels into true and false groups and calculating the average number of steps for both groups, the test statistic can be obtained as the difference in means in each of the 500 iterations. Using a significance level of 5% and calculating a p-value of 0.0, we reject the null hypothesis meaning ‘review’ is MAR on ‘n_steps’.
 
 <iframe
   src="assets/emp_dist_2.html"
@@ -118,6 +132,18 @@ For our project, we will be using datasets from [Food.com](https://www.food.com/
 
 
 ## Hypothesis Testing
+
+To determine whether the amount of calories differs depending on the rating a recipe received, a permutation test was conducted. The data was split into two groups of high and low ratings.
+
+**Null:** High rating and low rating labels have no relationship to `calories`.
+
+**Alternative:** The `calories` of high rating recipes is greater than that of low rating recipes.
+
+**Test Statistic:** Difference in Group Means
+
+**Significance Level:** 0.05
+
+By permuting these groups and calculating the chosen test statistic of the difference in means, the p-value was 0.322. With a significance level of 5%, we fail to reject the null hypothesis. Thus, it is shown that the amount of calories in recipes does not differ significantly between high and low ratings. Because of this, calories will not be used in the model as there is no difference in calories of high and low rankings.
 
 
 
@@ -144,8 +170,11 @@ Although the baseline model performed poorly given only three features, we think
 To ensure the final model is fair for different groups of observations, we conduct permutation testing and define our two groups by the date of the review (one for reviews before 01-01-2013 and other for reviews after 01-01-2013).
 
 **Null:** Our model is fair. Its accuracy for reviews before 2013 and after 2013 are roughly the same, and any differences are due to random chance.
+
 **Alternative:** Our model is unfair. Its accuracy for reviews before 2013 is lower than that of after 2013.
+
 **Test Statistic:** Difference in Group Accuracy
+
 **Significance Level:** 0.05
 
 With a p-value of 0.104 and a significance level of 5%, we fail to reject the null in favor of the alternative. Thus, this suggests that our model is fair.
