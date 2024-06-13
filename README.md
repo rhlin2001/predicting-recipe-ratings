@@ -1,10 +1,41 @@
 # Predicting Recipe Ratings
 
+Authors: Richard Lin, Francisco Downey
+
 
 
 
 
 ## Introduction
+
+Cooking recipes are traditions that are as old as civilization itself, passed on from generation to generation. In modern times, there is a large and growing community of home cooks including people who like to share recipes and people who try to follow and rate them. There are many factors that go into rating recipes such as personal enjoyment, ingredients, nutrition, and easy preparation. Our goal for this project is to try to determine what types of recipes have high ratings, and to ultimately build a model that can predict ratings for recipes. If we are able to accomplish this goal, then people may use our model to understand what kind of recipes deserve specific ratings.
+
+For our project, we will be using datasets from [Food.com](https://www.food.com/recipe) which include `recipes` (83,782 observations and 12 variables) and `interactions` (731,927 observations and 5 variables).
+
+### Recipes:
+
+| Column         | Description                                                    |
+| -------------- | -------------------------------------------------------------- |
+| 'name'         | Recipe name                                                    |
+| 'id'           | Recipe ID                                                      |
+| 'minutes'      | Minutes to prepare recipe                                       |
+| 'contributor_id' | User ID who submitted this recipe                              |
+| 'submitted'    | Date recipe was submitted                                       |
+| 'tags'         | Food.com tags for recipe                                        |
+| 'nutrition'    | Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value” |
+| 'n_steps'      | Number of steps in recipe                                       |
+| 'steps'        | Text for recipe steps, in order                                  |
+| 'description'  | User-provided description                                        |
+
+### Interactions:
+
+| Column      | Description         |
+|-------------|---------------------|
+| 'user_id'   | User ID             |
+| 'recipe_id' | Recipe ID           |
+| 'date'      | Date of interaction |
+| 'rating'    | Rating given        |
+| 'review'    | Review text         |
 
 
 
